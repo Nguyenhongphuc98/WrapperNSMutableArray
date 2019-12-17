@@ -12,12 +12,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WrapperMutableArray : NSObject
 
-{
-    //queue to process synchronize
-    dispatch_queue_t myQueue;
-    NSMutableArray *myArr;
+//queue to process synchronize
+@property dispatch_queue_t internalQueue;
+@property NSMutableArray *internalArr;
     
-}
 
 //overide init to init queue and arr
 -(instancetype) init;
@@ -37,8 +35,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) replaceObjectAtIndex:(NSUInteger)index withObject:(id)anObject;
 
-
-
+//check condition
+-(Boolean) isArrayNul;
+-(Boolean) isOutOfBound:(NSInteger) index;
 @end
 
 NS_ASSUME_NONNULL_END

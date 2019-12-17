@@ -10,13 +10,16 @@
 
 @implementation WrapperMutableArray
 
+@synthesize internalArr,internalQueue;
+
 -(instancetype) init{
     
     self=[super init];
+    
     if(self){
         //init with concurrent queue for allow read in more than one thread
-        myQueue=dispatch_queue_create("wrapper queue", DISPATCH_QUEUE_CONCURRENT);
-        myArr=[[NSMutableArray alloc] init];
+        internalQueue = dispatch_queue_create("wrapper queue", DISPATCH_QUEUE_CONCURRENT);
+        internalArr = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -24,25 +27,41 @@
 
 //========================================
 -(id) objectAtIndex:(NSUInteger)index{
+    //check conditon
+    if(self.isArrayNul)
+    {
+        NSLog(@"null exception: interal array is null from objectAtIndex:%ld method",index);
+        return nil;
+    }
     
-//    NSLog(@"pre get object %ld",index);
-//    return [myArr objectAtIndex:index];
+    if([self isOutOfBound:index])
+    {
+        NSLog(@"out of bound exception: internal array size:%ld, your index:%ld",[self.internalArr count],index);
+        return nil;
+    }
 
-    
-    id __block obj=nil;
-    dispatch_sync(myQueue, ^{
+    //get object
+    id __block obj = nil;
+    dispatch_sync(internalQueue, ^{
         NSLog(@"pre get object %ld",index);
-        obj= [self->myArr objectAtIndex:index];
+        obj = [self->internalArr objectAtIndex:index];
     });
 
     return obj;
 }
 
 -(NSUInteger) count{
-    NSUInteger __block c;
     
-    dispatch_sync(myQueue, ^{
-        c= [self->myArr count];
+    //check conditon
+    if(self.isArrayNul)
+    {
+        NSLog(@"null exception: interal array is null from count method");
+        return 0;
+    }
+    
+    NSUInteger __block c;
+    dispatch_sync(internalQueue, ^{
+        c= [self->internalArr count];
     });
     
     return c;
@@ -51,53 +70,117 @@
 
 //========================================
 -(void) addObject:(id)anObject{
-//    NSLog(@"pre add object %@",anObject);
-//    [myArr addObject:anObject];
-//    NSLog(@"added object %@",anObject);
     
+    //check conditon
+    if(self.isArrayNul)
+    {
+        NSLog(@"null exception: interal array is null from addObject method");
+        return ;
+    }
     
-    dispatch_barrier_sync(myQueue, ^{
+    if(anObject==nil)
+    {
+        NSLog(@"null exception: add null object to internal array");
+        return ;
+    }
+    
+    dispatch_barrier_sync(internalQueue, ^{
         NSLog(@"pre add object %@",anObject);
-        [self->myArr addObject: anObject];
+        [self->internalArr addObject: anObject];
         NSLog(@"added object %@",anObject);
     });
 }
 
 -(void) removeObject:(id)anObject{
-//    [myArr removeObject:anObject];
-//    NSLog(@"remove object %@",anObject);
     
-    dispatch_barrier_sync(myQueue, ^{
+    //check conditon
+    if(self.isArrayNul)
+    {
+        NSLog(@"null exception: interal array is null from removeObject method");
+        return ;
+    }
+    
+    if(anObject==nil)
+    {
+        NSLog(@"null exception: remove null object to internal array");
+        return ;
+    }
+
+    dispatch_barrier_sync(internalQueue, ^{
         NSLog(@"pre remove object %@",anObject);
-        [self->myArr removeObject:anObject];
+        [self->internalArr removeObject:anObject];
         NSLog(@"removed object %@",anObject);
-        
     });
 }
 
 -(void) insertObject:(id)anObject atIndex:(NSUInteger)index{
-//    [myArr insertObject:anObject atIndex:index];
-//    NSLog(@"insert object at %ld",index);
     
-    dispatch_barrier_sync(myQueue, ^{
+    //check conditon
+    if(self.isArrayNul)
+    {
+        NSLog(@"null exception: interal array is null from insertObject atIndex:%ld method",index);
+        return ;
+    }
+    
+    if([self isOutOfBound:index])
+    {
+        NSLog(@"out of bound exception: internal array size:%ld, your index:%ld",[self.internalArr count],index);
+        return ;
+    }
+    
+    if(anObject==nil)
+    {
+        NSLog(@"null exception: insert null object to internal array");
+        return ;
+    }
+
+    dispatch_barrier_sync(internalQueue, ^{
         NSLog(@"pre insert object %@",anObject);
-        [self->myArr insertObject:anObject atIndex:index];
+        [self->internalArr insertObject:anObject atIndex:index];
         NSLog(@"inserted object %@",anObject);
-        
     });
 }
 
 -(void) replaceObjectAtIndex:(NSUInteger)index withObject:(id)anObject{
-//    [myArr replaceObjectAtIndex:index withObject:anObject];
-//    NSLog(@"replace object at %@",anObject);
+
+    //check conditon
+    if(self.isArrayNul)
+    {
+        NSLog(@"null exception: interal array is null from replaceObject atIndex:%ld method",index);
+        return ;
+    }
     
+    if([self isOutOfBound:index])
+    {
+        NSLog(@"out of bound exception: internal array size:%ld, your index:%ld",[self.internalArr count],index);
+        return ;
+    }
     
-    dispatch_barrier_sync(myQueue, ^{
+    if(anObject==nil)
+    {
+        NSLog(@"null exception: replace null object to internal array");
+        return ;
+    }
+    
+    dispatch_barrier_sync(internalQueue, ^{
         NSLog(@"pre replace object at %@",anObject);
-        [self->myArr replaceObjectAtIndex:index withObject:anObject];
+        [self->internalArr replaceObjectAtIndex:index withObject:anObject];
         NSLog(@"replaced object at %@",anObject);
-        
     });
+}
+
+//===================================
+-(Boolean) isArrayNul{
+    if(internalArr==nil)
+        return YES;
+    else
+        return NO;
+}
+
+-(Boolean) isOutOfBound:(NSInteger)index{
+    if(internalArr != nil && index < internalArr.count&&index>-1)
+        return NO;
+    return YES;
 }
 
 @end
