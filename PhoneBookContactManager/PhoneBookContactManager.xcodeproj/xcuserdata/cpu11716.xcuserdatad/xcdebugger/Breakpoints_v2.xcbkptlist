@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PhoneBookContactManager/DataAccessLayer/Gateway/DContactStore.m"
+            timestampString = "598363304.416712"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "144"
+            endingLineNumber = "144"
+            landmarkName = "-responseContactForCallback:contactDTOArray:"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__60-[DContactStore responseContactForCallback:contactDTOArray:]_block_invoke"
+                  moduleName = "PhoneBookContactManager"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cpu11716/Downloads/source/IOS%20Task/PhoneBookContactManager/PhoneBookContactManager/DataAccessLayer/Gateway/DContactStore.m"
+                  timestampString = "598363304.431923"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "144"
+                  endingLineNumber = "144"
+                  offsetFromSymbolStart = "186">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__60-[DContactStore responseContactForCallback:contactDTOArray:]_block_invoke"
+                  moduleName = "PhoneBookContactManager"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cpu11716/Downloads/source/IOS%20Task/PhoneBookContactManager/PhoneBookContactManager/DataAccessLayer/Gateway/DContactStore.m"
+                  timestampString = "598363304.434654"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "144"
+                  endingLineNumber = "144"
+                  offsetFromSymbolStart = "194">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
